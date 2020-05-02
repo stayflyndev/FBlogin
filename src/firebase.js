@@ -15,7 +15,7 @@ var firebaseConfig = {
   projectId: process.env.REACT_APP_PROJECT_ID,
   storageBucket: process.env.REACT_APP_STRG_BUCKT,
   messagingSenderId: process.env.REACT_APP_MSSG_SNDR_ID,
-  appId: process.env.REACT_APP_APP_ID,
+  appId: process.env.REACT_APP_APP_ID
 //   measurementId: "G-FJFM9Q2KLL"
   };
   
