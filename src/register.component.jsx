@@ -31,7 +31,8 @@ class register extends Component {
   create a user with auth method using the email/password
   then take that user and store it in the db
   store the email,password,and timestamp
-  then alert success and clear the form
+  then alert success and clear the
+
   */
   onHandleSubmit = e => {
     e.preventDefault();

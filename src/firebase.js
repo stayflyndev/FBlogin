@@ -32,6 +32,39 @@ provider.setCustomParameters({
     'prompt': 'select_account'
   });
 
+
+  export const createUserProfile = async (authuser, additionaldata) => {
+    if(!authuser) return;
+    
+    // see if already exists
+    const userReference = firestore.doc(`users/${authuser.uid}`)
+    const snapShot = await userReference.get()
+    // see if there is data
+    console.log(snapShot)
+    
+    if(!snapShot.exists) {
+      // from the userRef
+      const {displayName, email } = authuser
+      const createdAt = new Date;
+    
+      try{
+        //create db entry with key values
+        // 
+        await userReference.set({
+          displayName,
+          email,
+          createdAt,
+          ...additionaldata,
+        })
+      }
+        catch(error)
+        {
+          console.log("error creating user " + error.message)
+    
+        }
+      }
+      return userReference
+    }
   
 // export const googleSignIn = firebase.auth().signInWithPopup(provider).then(function(result) {
 //     // This gives you a Google Access Token. You can use it to access the Google API.

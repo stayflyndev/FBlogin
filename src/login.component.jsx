@@ -32,7 +32,9 @@ class login extends Component {
         
     }
 
-    googleSignIn= () => {auth.signInWithRedirect(provider).then(function(result) {
+    googleSignIn= () => {
+        
+        auth.signInWithRedirect(provider).then(function(result) {
         // This gives you a Google Access Token. You can use it to access the Google API.
         var token = result.credential.accessToken;
         // The signed-in user info.
@@ -50,6 +52,13 @@ class login extends Component {
         // ...
       })};
     
+      googleSignOut = () => {
+      auth.signOut().then(function() {
+          console.log("signed out")
+      }).catch(function(error) {
+        // An error happened.
+      });
+    }
     
 
 
@@ -81,6 +90,9 @@ class login extends Component {
 </Form>
 <Button variant="primary" type="submit" onClick={this.googleSignIn} >
     Google Sign In 
+  </Button>
+  <Button variant="primary" type="submit" onClick={this.googleSignOut} >
+    Google Sign out 
   </Button>
             </div>
         )
