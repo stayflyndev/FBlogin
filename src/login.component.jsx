@@ -4,24 +4,8 @@ import Jumbotron from 'react-bootstrap/Jumbotron'
 import {Container, Row} from 'react-bootstrap'
 import Col from 'react-bootstrap/Col'
 import Button from 'react-bootstrap/Button'
-import { auth, firestore } from './firebase';
-
-// const App = () => (
-//   <div className="App">
-//       <Container fluid>
-//       <Row>
-    
-//        <Col> Firebase Signin and Auth
-//      
-// </Col>
-// </Row>
-// </Container>
-//   </div>
-// );
-
-// export default App;
-
-
+import { auth, firestore, provider } from './firebase';
+// import {googleSignIn} from './firebase'
 
 class login extends Component {
     constructor(){
@@ -33,6 +17,7 @@ class login extends Component {
         })
     }
 
+    // reads the input values and sets the state
     onHandleChange = e => {
         // console.log(e.target.value);
         const {name, value} = e.target;
@@ -41,14 +26,35 @@ class login extends Component {
      
     }
     
-
+    // logs in the user
     onHandleSubmit = e => {
         e.preventDefault();
         
     }
 
+    googleSignIn= () => {auth.signInWithRedirect(provider).then(function(result) {
+        // This gives you a Google Access Token. You can use it to access the Google API.
+        var token = result.credential.accessToken;
+        // The signed-in user info.
+        var user = result.user;
+        console.log("result", result)
+        // ...
+      }).catch(function(error) {
+        // Handle Errors here.
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        // The email of the user's account used.
+        var email = error.email;
+        // The firebase.auth.AuthCredential type that was used.
+        var credential = error.credential;
+        // ...
+      })};
+    
+    
+
 
     render() {
+        const googleSignIn = this.state
 
         const {email, password} = this.state;
         return (
@@ -73,6 +79,9 @@ class login extends Component {
     Submit
   </Button>
 </Form>
+<Button variant="primary" type="submit" onClick={this.googleSignIn} >
+    Google Sign In 
+  </Button>
             </div>
         )
     }
