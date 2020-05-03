@@ -22,15 +22,31 @@ class login extends Component {
         // console.log(e.target.value);
         const {name, value} = e.target;
         this.setState({[name]: value})
-        console.log({auth})
-     
-    }
+        }
     
     // logs in the user
-    onHandleSubmit = e => {
+    onHandleSubmit = async e => {
         e.preventDefault();
-        
+            
+        const {email, password} = this.state
+   try{
+    const {user} = auth.signInWithEmailAndPassword(email, password)
+     console.log("You are now signed in")
+     
+   }catch(error){
+        // Handle Errors here.
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        if (errorCode === 'auth/wrong-password') {
+          alert('Wrong password.');
+        } else {
+          alert(errorMessage);
+        }
+        console.log(error);
+     };
     }
+
+
 
     googleSignIn= () => {
         
@@ -39,7 +55,7 @@ class login extends Component {
         var token = result.credential.accessToken;
         // The signed-in user info.
         var user = result.user;
-        console.log("result", result)
+        console.log("result", )
         // ...
       }).catch(function(error) {
         // Handle Errors here.
@@ -54,7 +70,7 @@ class login extends Component {
     
       googleSignOut = () => {
       auth.signOut().then(function() {
-          console.log("signed out")
+          
       }).catch(function(error) {
         // An error happened.
       });
@@ -68,10 +84,10 @@ class login extends Component {
         const {email, password} = this.state;
         return (
             <div>
-                <Form>
-    <Form.Group controlId="formBasicEmail" onSubmit={this.onHandleSubmit}>
+                <Form onSubmit={this.onHandleSubmit}>
+    <Form.Group controlId="formBasicEmail" >
     <Form.Label>Email address</Form.Label>
-    <Form.Control type="email" placeholder="Enter email" name="email" value={this.state.email} onChange={this.onHandleChange}/>
+    <Form.Control type="email" placeholder="Enter email" name="email" value={email} onChange={this.onHandleChange}/>
     <Form.Text className="text-muted">
       We'll never share your email with anyone else.
     </Form.Text>
@@ -79,7 +95,7 @@ class login extends Component {
 
   <Form.Group controlId="formBasicPassword"> 
     <Form.Label>Password</Form.Label>
-    <Form.Control type="password" placeholder="Password" name="password" value={this.state.password} onChange={this.onHandleChange}/>
+    <Form.Control type="password" placeholder="Password" name="password" value={password} onChange={this.onHandleChange}/>
   </Form.Group>
   <Form.Group controlId="formBasicCheckbox">
     <Form.Check type="checkbox" label="Check me out" />

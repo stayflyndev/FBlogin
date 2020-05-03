@@ -32,6 +32,39 @@ provider.setCustomParameters({
     'prompt': 'select_account'
   });
 
+  
+  export const add = async (authenticated, additionaldata) => {
+    if (!authenticated) return;
+    const userReference = firestore.doc(`users/${authenticated.uid}`)
+    const snapShot = await userReference.get()
+    // see if there is data
+    console.log(snapShot)
+    if (!snapShot.exists) {
+      // from the userRef
+      const {
+        displayName,
+        email,
+        } = authenticated
+      const createdAt = new Date;
+
+      try {
+        //create db entry with key values
+        // 
+        await userReference.set({
+          displayName,
+          email,
+          createdAt,
+          ...additionaldata,
+        })
+      } catch (error) {
+        console.log("error creating user " + error.message)
+
+      }
+    }
+    return userReference
+
+  }
+
 
   export const createUserProfile = async (authuser, additionaldata) => {
     if(!authuser) return;
@@ -39,8 +72,8 @@ provider.setCustomParameters({
     // see if already exists
     const userReference = firestore.doc(`users/${authuser.uid}`)
     const snapShot = await userReference.get()
-    // see if there is data
-    console.log(snapShot)
+    //snapshot tells us if the auth user exist or not
+    console.log(userReference)
     
     if(!snapShot.exists) {
       // from the userRef
@@ -66,24 +99,6 @@ provider.setCustomParameters({
       return userReference
     }
   
-// export const googleSignIn = firebase.auth().signInWithPopup(provider).then(function(result) {
-//     // This gives you a Google Access Token. You can use it to access the Google API.
-//     var token = result.credential.accessToken;
-//     // The signed-in user info.
-//     var user = result.user;
-//     console.log("result", result)
-//     // ...
-//   }).catch(function(error) {
-//     // Handle Errors here.
-//     var errorCode = error.code;
-//     var errorMessage = error.message;
-//     // The email of the user's account used.
-//     var email = error.email;
-//     // The firebase.auth.AuthCredential type that was used.
-//     var credential = error.credential;
-//     // ...
-//   });
-
 
 
   export default firebase;

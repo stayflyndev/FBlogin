@@ -4,14 +4,15 @@ import Jumbotron from 'react-bootstrap/Jumbotron'
 import { Container, Row } from 'react-bootstrap'
 import Col from 'react-bootstrap/Col'
 import Button from 'react-bootstrap/Button'
-import { auth, firestore } from './firebase';
+import { auth, firestore, createUserProfile, add } from './firebase';
+
 
 class register extends Component {
   constructor() {
     super();
     
     this.state = ({
-      displayname: '',
+      displayName: '',
       email: '',
       password: '',
       confirmpassword: ''
@@ -34,28 +35,23 @@ class register extends Component {
   then alert success and clear the
 
   */
-  onHandleSubmit = e => {
+  onHandleSubmit = async e => {
     e.preventDefault();
 
-    const {displayname, email, password, confirmpassword} = this.state
+    const {displayName, email, password, confirmpassword} = this.state
 
-    auth.createUserWithEmailAndPassword(email, password).then(user => {
-      console.log(user)
-      const timeStamp = new Date();
-      return firestore.collection('users').doc(user.user.uid).set({
-        email: email,
-        password: password,
-        time: timeStamp
-      }).then(() =>{
-        alert("Created!");
-        this.setState({
-          displayname: '',
-      email: '',
-      password: '',
-      confirmpassword: ''
-        })
-      } )
-    })
+    try {
+      const {user}  = await auth.createUserWithEmailAndPassword(email, password)
+      await add(user, {displayName})
+      this.setState({
+       displayname: '',
+       email: '',
+       password: '',
+       confirmPassword: ''
+      }, () => console.log("fgg"))
+     } catch (error) {
+         console.log(error.message)
+     }
 
   }
 
